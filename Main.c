@@ -25,14 +25,15 @@ void menu(void)
 		printf("Choose function from list:\n"
 			"1 - Create polynom\n"
 			"2 - Print polynom\n"
-			"3 - Remove all elements with even degree\n"
-			"4 - Exit out of program\n");
+			"3 - Sort polynom\n"
+			"4 - Remove all elements with even degree\n"
+			"5 - Exit out of program\n");
 		scanf("%d", &sw);
 		switch (sw)
 		{
 		case create:
-			printf("Enter the degree and coefficient before and after the space\n");
-			if (scanf("%d %d", &degree, &coeff) != 2 || check_degree(degree, &ptr, &size) != 0 || coeff == 0)
+			printf("Enter the coefficient and degree before and after the space\n");
+			if (scanf("%d %d", &coeff ,&degree) != 2 || check_degree(degree, &ptr, &size) != 0 || coeff == 0)
 			{
 				while (getchar() != '\n');
 				printf("Input error!\n");
@@ -43,8 +44,11 @@ void menu(void)
 		case print:
 			print_node(head);
 			break;
+		case sort:
+			sort_node(&head);
+			break;
 		case func25:
-			function25(&head);
+			function25(head);
 			break;
 		case exit1:
 		{
@@ -121,6 +125,7 @@ int check_degree(int degree, int** ptr, int* size)
 void print_node(polynom* head) 
 {
 	int first = 1;
+	int count = 0;
 	if (head == NULL) 
 	{
 		printf("Polynomial is empty!\n");
@@ -131,38 +136,73 @@ void print_node(polynom* head)
 		int coeff = head->coeff;
 		int degree = head->degree;
 
-		if (first == 1) 
+		if (first == 1)
 		{
-			if (coeff < 0) 
+			if (coeff == 1 && degree == 0)
 			{
-				printf("-");
-				coeff = -coeff;
+				printf("1");
+				first = 0;
 			}
+			if (coeff == -1 && degree == 0)
+			{
+				printf("-1");
+				first = 0;
+			}
+			if (degree == 0 && first != 0)
+			{
+				printf("%d", coeff);
+				first = 0;
+			}
+			if (degree != 0)
+			{
+				if (coeff == 1)
+				{
+					printf("x^%d", degree);
+					first = 0;
+				}
+				if (coeff == -1)
+				{
+					printf("-x^%d", degree);
+					first = 0;
+				}
+			}
+			if (first != 0)
+			{
+				printf("%dx^%d", coeff, degree);
+				first = 0;
+			}
+			head = head->next;
+			count++;
+			continue;
 		}
-		else 
+		if (coeff < 0)
 		{
-			if (coeff < 0) 
-			{
-				printf(" - ");
-				coeff = -coeff;
-			}
-			else 
-			{
-				printf(" + ");
-			}
-		}
-		if (coeff != 1 && degree == 0) 
-		{
-			printf("%d", coeff);
+			printf(" - ");
+			coeff = -coeff;
 		}
 		else
 		{
-			printf("x^%d", degree);
+			printf(" + ");
 		}
-		first++;
+		if (degree == 0)
+		{
+			printf("%d", coeff);
+		}
+		else 
+		{
+			if (coeff == 1)
+			{
+				printf("x^%d", degree);
+			}
+			else
+			{
+				printf("%dx^%d", coeff, degree);
+			}
+		}
+		count++;
 		head = head->next;
 	}
-	printf("\nAmount of monomials: %d\n", first - 1);
+	printf("\nAmount of monomials: %d\n", count);
 }
 
 void function25(polynom** head)
@@ -170,6 +210,11 @@ void function25(polynom** head)
 	if (*head == NULL)
 	{
 		printf("Polynomial is empty!\n");
+		return;
+	}
+	if ((*head)->next == NULL && (*head)->degree % 2 == 0)
+	{
+		*head = NULL;
 		return;
 	}
 	polynom* curr = *head;
@@ -207,3 +252,48 @@ void function25(polynom** head)
 		printf("Deleled %d monomials\n", count);
 	}
 }
+
+void sort_node(polynom** head)
+{
+	if (*head == NULL || (*head)->next == NULL)
+		return;
+	polynom* prev;
+	polynom* current = *head;
+	polynom* next = current->next;
+	int swap;
+	do
+	{
+		swap = 0;
+		prev = NULL;
+		current = *head;
+		next = current->next;
+		while (current != NULL && current->next != NULL) 
+		{
+			next = current->next;
+			if (current->degree < next->degree)
+			{
+				if (prev == NULL)
+				{
+					*head = next;
+				}
+				else
+				{
+					prev->next = next;
+				}
+				current->next = next->next;
+				next->next = current;
+				prev = next;
+				swap = 1;
+
+			}
+			else
+			{
+				prev = current;
+				current = current->next;
+			}
+		}
+	} while (swap == 1);
+
+}
+
+

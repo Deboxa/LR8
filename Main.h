@@ -12,6 +12,7 @@ typedef enum _functions
 {
 	create = 1,
 	print,
+	sort,
 	func25,
 	exit1
 }functions;
@@ -27,4 +28,6 @@ int check_degree(int degree, int** ptr, int* size);
 void print_node(polynom* head);
 
 void function25(polynom** head);
+
+void sort_node(polynom** head);
 #endif
