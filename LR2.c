@@ -120,11 +120,14 @@ void modify_nodes(node* head)
 		}
 		curr = curr->next;
 	}
+	putchar('\n');
 	printf("Vowel: ");
 	print_node(vowel_node);
 	putchar('\n');
+	putchar('\n');
 	printf("Consonant: ");
 	print_node(consonant_node);
+	putchar('\n');
 	putchar('\n');
 	free_node(vowel_node);
 	free_node(consonant_node);
