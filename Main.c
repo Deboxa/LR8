@@ -2,6 +2,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
+#include "LR2.h"
 #include "Main.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,7 +28,8 @@ void menu(void)
 			"2 - Print polynom\n"
 			"3 - Sort polynom\n"
 			"4 - Remove all elements with even degree\n"
-			"5 - Exit out of program\n");
+			"5 - Open part 2 of laboratory work 8\n"
+			"6 - Exit out of program\n");
 		scanf("%d", &sw);
 		switch (sw)
 		{
@@ -39,16 +41,16 @@ void menu(void)
 				printf("Input error!\n");
 				break;
 			}
-			add_node(&head, degree, coeff);
+			add_polynom_node(&head, degree, coeff);
 			break;
 		case print:
-			print_node(head);
+			print_polynom_node(head);
 			break;
 		case sort:
 			sort_node(&head);
 			break;
 		case func25:
-			function25(head);
+			function25(&head);
 			break;
 		case exit1:
 		{
@@ -62,6 +64,9 @@ void menu(void)
 			}
 			return;
 		}
+		case lr8_2:
+			lr2();
+			break;
 		default:
 			printf("Input error!\n");
 			break;
@@ -69,7 +74,7 @@ void menu(void)
 	} while (sw != exit1);
 }
 
-polynom* create_node(int degree, int coeff)
+polynom* create_polynom_node(int degree, int coeff)
 {
 	polynom* Node = (polynom*)malloc(sizeof(polynom));
 	if (Node == NULL)
@@ -83,9 +88,9 @@ polynom* create_node(int degree, int coeff)
 	return Node;
 }
 
-void add_node(polynom** head, int degree, int coeff)
+void add_polynom_node(polynom** head, int degree, int coeff)
 {
-	polynom* next_node = create_node(degree, coeff);
+	polynom* next_node = create_polynom_node(degree, coeff);
 	if (next_node == NULL)
 	{
 		printf("Create node error!\n");
@@ -122,7 +127,7 @@ int check_degree(int degree, int** ptr, int* size)
 	return 0;
 }
 
-void print_node(polynom* head) 
+void print_polynom_node(polynom* head)
 {
 	int first = 1;
 	int count = 0;
